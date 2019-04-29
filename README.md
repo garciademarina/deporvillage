@@ -71,7 +71,7 @@ Code (string) Optional code
 Message (string) A string representation for the error
 ```
 
-## Notes
+## Structure
 #### Server: 
 
 Http server, set up all API routes using injected services from cmd/api/main.go
@@ -94,7 +94,7 @@ Repositories satisfy the *Repository* interface, this way we can swap mongodb by
 
 http handler used by server.go, handlers will use injected services  from pkg/server.go
 
-*notes*
+## Notes
 
 - ShippingAddress and BillingAddress has their own struct, this way in the future we can get reports like: 
 All order with "shipped" status where shipping city is Madrid.
