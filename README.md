@@ -265,7 +265,9 @@ Update order status.
 
 * I had some issues because the api container started before rabbitmq, so I made a simple bash script to delay 30 seconds the start of the api. 
  
+* Partially tested, here some test for **adding package**
 
+https://github.com/garciademarina/deporvillage/tree/master/pkg/adding
 
 # Questions
 * Once the order service is almost ready, how will you deploy the service to a cloud hosting? You can try to summarize your solution using 
