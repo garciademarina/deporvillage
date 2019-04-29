@@ -1,6 +1,9 @@
 package adding
 
-import "errors"
+import (
+	"errors"
+	"fmt"
+)
 
 type Payload []Order
 
@@ -41,6 +44,9 @@ var ErrDuplicate = errors.New("order already exists")
 // ErrInvalidStatus ...
 var ErrInvalidStatus = errors.New("Order status is invalid")
 
+// EventOrderAdded ...
+var EventOrderAdded = "order_added"
+
 // Service provides order adding operations.
 type Service interface {
 	AddOrder(Order) error
@@ -53,13 +59,20 @@ type Repository interface {
 	AddOrder(Order) error
 }
 
+// Broker provides access to a message broker
+type Broker interface {
+	// Publish sends a message
+	Publish(body string) error
+}
+
 type service struct {
 	oR Repository
+	b  Broker
 }
 
 // NewService creates an adding service with the necessary dependencies
-func NewService(r Repository) Service {
-	return &service{r}
+func NewService(r Repository, b Broker) Service {
+	return &service{r, b}
 }
 
 // AddOrder adds the given order to the database
@@ -72,6 +85,9 @@ func (s *service) AddOrder(o Order) error {
 	if err != nil {
 		return err
 	}
+
+	// send event
+	s.b.Publish(fmt.Sprintf("%d-%s", o.ID, EventOrderAdded))
 	return nil
 }
 

@@ -25,4 +25,4 @@ RUN cp api /opt/deporvillage
 EXPOSE 8080
 
 # Run the executable
-CMD ["/opt/deporvillage"]
+CMD ["bash", "start.sh"]

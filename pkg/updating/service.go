@@ -1,6 +1,9 @@
 package updating
 
-import "errors"
+import (
+	"errors"
+	"fmt"
+)
 
 // Payload ...
 type Payload []Order
@@ -42,6 +45,9 @@ func (e Event) GetMeaning() string {
 	return "Unknown result"
 }
 
+// EventOrderStatusUpdated ...
+var EventOrderStatusUpdated = "order_status_updated"
+
 // Service provides order updating operations.
 type Service interface {
 	UpdateStatusOrder(Order) error
@@ -53,13 +59,20 @@ type Repository interface {
 	UpdateStatusOrder(Order) error
 }
 
+// Broker provides access to a message broker
+type Broker interface {
+	// Publish sends a message
+	Publish(body string) error
+}
+
 type service struct {
 	oR Repository
+	b  Broker
 }
 
 // NewService creates an adding service with the necessary dependencies
-func NewService(r Repository) Service {
-	return &service{r}
+func NewService(r Repository, b Broker) Service {
+	return &service{r, b}
 }
 
 // UpdateStatusOrder adds the given order to the database
@@ -68,6 +81,10 @@ func (s *service) UpdateStatusOrder(o Order) error {
 		return ErrInvalidStatus
 	}
 	err := s.oR.UpdateStatusOrder(o)
+
+	// send event
+	s.b.Publish(fmt.Sprintf("%d-%s [%s]", o.ID, EventOrderStatusUpdated, *o.Status))
+
 	if err != nil {
 		return err
 	}

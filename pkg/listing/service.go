@@ -28,5 +28,10 @@ func NewService(r Repository) Service {
 
 // GetOrder adds the given order(s) to the database
 func (s *service) GetOrder(id int64) (Order, error) {
-	return s.r.GetOrder(id)
+	o, err := s.r.GetOrder(id)
+	if err != nil {
+		return Order{}, err
+	}
+
+	return o, nil
 }

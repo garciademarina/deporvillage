@@ -12,6 +12,17 @@ services:
       - "8080:8080"
     links:
       - "mongodb:mongodb"
+      - "rabbitmq:rabbitmq"
+    depends_on:
+      - "rabbitmq"
+      - "mongodb"
+    networks:
+      - network1
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports: 
+      - "5672:5672"
+      - "15672:15672"
     networks:
       - network1
       

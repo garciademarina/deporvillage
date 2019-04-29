@@ -104,6 +104,21 @@ All order with "shipped" status where shipping city is Madrid.
 - Status must be one of the following: 
 **pending_confirmation, confirmed, sent_to_warehouse, shipped, in_transit, delivered**
 
+- Events are sent to rabbitmq. List of event: 
+
+    - "order_added", 
+
+        ```824635283344-order_added```
+
+        example: "OrderID - order_added"
+
+    - "order_status_updated", 
+
+        ```824635283344-order_status_updated [confirmed]```
+
+        example "OrderID - order_status_updated [STATUS]
+
+    \* using docker you can check all rabbitmq messages from http://localhost:15672/ (guest/guest)
 ## endpoints 
 
 #### GET /order/{ID}
@@ -248,6 +263,7 @@ Update order status.
 }
 ```
 
+* I had some issues because the api container started before rabbitmq, so I made a simple bash script to delay 30 seconds the start of the api. 
  
 
 
@@ -279,3 +295,4 @@ d) Deployment - Microplatform (AMI) vs Kubernetes?
 
 With my limited experience with kubernetes, It shoud be easy to deploy de api to kubernetes.
 Mongodb instance can be deployed to kubernetes or an external service selfmanaged. 
+

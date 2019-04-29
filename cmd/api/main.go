@@ -10,6 +10,7 @@ import (
 	"syscall"
 
 	"github.com/garciademarina/deporvillage/pkg/adding"
+	broker "github.com/garciademarina/deporvillage/pkg/broker/rabbitmq"
 	"github.com/garciademarina/deporvillage/pkg/listing"
 	"github.com/garciademarina/deporvillage/pkg/server"
 	"github.com/garciademarina/deporvillage/pkg/storage/mongodb"
@@ -41,9 +42,16 @@ func main() {
 		log.Fatal(err2)
 	}
 
-	adder := adding.NewService(storage)
+	// broker rabbitmq
+	broker, errBroker := broker.NewBroker("amqp://guest:guest@rabbitmq", "deporvillageQueue")
+	if errBroker != nil {
+		log.Fatal(errBroker)
+	}
+	defer broker.Close()
+
+	adder := adding.NewService(storage, broker)
+	updater := updating.NewService(storage, broker)
 	lister := listing.NewService(storage)
-	updater := updating.NewService(storage)
 
 	resultsOrders := adder.AddSampleOrders(adding.DefaultOrders)
 
