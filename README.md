@@ -72,25 +72,25 @@ Message (string) A string representation for the error
 ```
 
 ## Notes
-- Server: 
+#### Server: 
 
 Http server, set up all API routes using injected services from cmd/api/main.go
 
 pkg/server
 
-- Services: 
+#### Services: 
 
 /pkg/adding
 /pkg/updating
 /pkg/listing
 
-- Repository:
+#### Repository:
 
 Repositories satisfy the *Repository* interface, this way we can swap mongodb by another noSQL database or SQL o in-memory implementation. 
 
 /pkg/storage/mongodb
 
-- Handlers: 
+#### Handlers: 
 
 http handler used by server.go, handlers will use injected services  from pkg/server.go
 
@@ -103,6 +103,7 @@ All order with "shipped" status where shipping city is Madrid.
 
 - Status must be one of the following: 
 **pending_confirmation, confirmed, sent_to_warehouse, shipped, in_transit, delivered**
+
 ## endpoints 
 
 #### GET /order/{ID}
