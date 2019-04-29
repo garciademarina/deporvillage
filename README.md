@@ -101,7 +101,8 @@ All order with "shipped" status where shipping city is Madrid.
 
 - I asume "PUT /order" endpoint only updated the order status. If all order fields needs to be updated, it should be easy to implement by just adding the missing order fields.  
 
-
+- Status must be one of the following: 
+**pending_confirmation, confirmed, sent_to_warehouse, shipped, in_transit, delivered**
 ## endpoints 
 
 #### GET /order/{ID}
